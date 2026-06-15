@@ -14,6 +14,7 @@ import { MatchScore } from "@/components/results/match-score"
 import { SkillAnalysis } from "@/components/results/skill-analysis"
 import { AISummary } from "@/components/results/ai-summary"
 import { RecommendationBadge } from "@/components/results/recommendation-badge"
+import { ResultsChat } from "@/components/assistant-ui/results-chat"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ResultsSkeleton } from "@/components/skeletons"
@@ -142,6 +143,9 @@ export default function ResultsPage() {
           <AISummary summary={results.summary} />
         </div>
       </div>
+
+      {/* AI Chatbot — floating modal button (bottom-right) */}
+      <ResultsChat results={results} />
     </div>
   )
 }

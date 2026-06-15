@@ -4,7 +4,7 @@ import { buildAnalysisPrompt } from "./prompt"
 import { getMockAnalysisResult } from "@/lib/sample-data"
 
 const DEEPSEEK_BASE_URL = "https://api.deepseek.com"
-const DEEPSEEK_MODEL = "deepseek-chat"
+const DEEPSEEK_MODEL = "deepseek-v4-flash"
 
 export async function analyzeResume(
   jobDescription: string,
