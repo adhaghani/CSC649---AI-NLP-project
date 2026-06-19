@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google"
 import type { Metadata } from "next"
 
 import "./globals.css"
@@ -8,11 +8,16 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { cn } from "@/lib/utils"
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["300", "400", "500", "600", "700"],
+})
 
-const fontMono = Geist_Mono({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  weight: ["400", "500"],
 })
 
 export const metadata: Metadata = {
@@ -32,9 +37,9 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn(
         "antialiased",
-        fontMono.variable,
+        jetbrainsMono.variable,
         "font-sans",
-        geist.variable
+        spaceGrotesk.variable
       )}
     >
       <body>

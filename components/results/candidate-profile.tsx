@@ -1,6 +1,10 @@
 import type { AnalysisResult } from "@/types"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import {
+  GlassCard,
+  GlassCardContent,
+  GlassCardHeader,
+  GlassCardTitle,
+} from "@/components/ui/glass-card"
 import { Mail, Phone, GraduationCap, Briefcase } from "lucide-react"
 
 interface CandidateProfileProps {
@@ -17,14 +21,14 @@ interface CandidateProfileProps {
 
 export function CandidateProfile({ candidate }: CandidateProfileProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Candidate Profile</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <GlassCard>
+      <GlassCardHeader>
+        <GlassCardTitle>Candidate Profile</GlassCardTitle>
+      </GlassCardHeader>
+      <GlassCardContent className="space-y-4">
         {/* Avatar & Name */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center size-16 rounded-full bg-primary/10 text-primary text-2xl font-bold">
+          <div className="flex items-center justify-center size-16 rounded-full bg-lime/15 text-lime text-2xl font-bold">
             {candidate.candidateName
               .split(" ")
               .slice(0, 2)
@@ -32,10 +36,10 @@ export function CandidateProfile({ candidate }: CandidateProfileProps) {
               .join("")}
           </div>
           <div>
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-lg font-semibold text-text-primary">
               {candidate.candidateName}
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-text-secondary">
               {candidate.experienceYears} years of experience
             </p>
           </div>
@@ -44,18 +48,18 @@ export function CandidateProfile({ candidate }: CandidateProfileProps) {
         {/* Contact details */}
         <div className="space-y-2 pt-2">
           <div className="flex items-center gap-2 text-sm">
-            <Mail className="size-4 text-muted-foreground shrink-0" />
-            <span className="text-muted-foreground truncate">
+            <Mail className="size-4 text-text-secondary shrink-0" />
+            <span className="text-text-secondary truncate">
               {candidate.email}
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <Phone className="size-4 text-muted-foreground shrink-0" />
-            <span className="text-muted-foreground">{candidate.phone}</span>
+            <Phone className="size-4 text-text-secondary shrink-0" />
+            <span className="text-text-secondary">{candidate.phone}</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <GraduationCap className="size-4 text-muted-foreground shrink-0" />
-            <span className="text-muted-foreground truncate">
+            <GraduationCap className="size-4 text-text-secondary shrink-0" />
+            <span className="text-text-secondary truncate">
               {candidate.education}
             </span>
           </div>
@@ -64,20 +68,23 @@ export function CandidateProfile({ candidate }: CandidateProfileProps) {
         {/* Previous Roles */}
         {candidate.previousRoles.length > 0 && (
           <div className="pt-2">
-            <p className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1">
+            <p className="text-xs font-medium text-text-secondary mb-2 flex items-center gap-1">
               <Briefcase className="size-3" />
               Previous Roles
             </p>
             <div className="flex flex-wrap gap-1">
               {candidate.previousRoles.map((role) => (
-                <Badge key={role} variant="secondary" className="text-xs">
+                <span
+                  key={role}
+                  className="inline-flex items-center rounded-full border border-glass-border bg-white/[0.05] px-2.5 py-0.5 text-xs text-text-secondary"
+                >
                   {role}
-                </Badge>
+                </span>
               ))}
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </GlassCardContent>
+    </GlassCard>
   )
 }

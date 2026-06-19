@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  GlassCard,
+  GlassCardContent,
+  GlassCardHeader,
+  GlassCardTitle,
+} from "@/components/ui/glass-card"
 import { cn, getScoreColor } from "@/lib/utils"
 
 interface ScoreGaugeProps {
@@ -12,11 +17,11 @@ export function ScoreGauge({ score, label, description }: ScoreGaugeProps) {
   const offset = circumference - (score / 100) * circumference
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{label}</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col items-center">
+    <GlassCard>
+      <GlassCardHeader>
+        <GlassCardTitle>{label}</GlassCardTitle>
+      </GlassCardHeader>
+      <GlassCardContent className="flex flex-col items-center">
         <div className="relative">
           <svg className="size-32 -rotate-90" viewBox="0 0 100 100">
             <circle
@@ -26,7 +31,7 @@ export function ScoreGauge({ score, label, description }: ScoreGaugeProps) {
               fill="none"
               stroke="currentColor"
               strokeWidth="8"
-              className="text-muted/20"
+              className="text-white/[0.05]"
             />
             <circle
               cx="50"
@@ -38,10 +43,10 @@ export function ScoreGauge({ score, label, description }: ScoreGaugeProps) {
               stroke="currentColor"
               className={cn(
                 score >= 80
-                  ? "text-emerald-500"
+                  ? "text-lime"
                   : score >= 60
-                    ? "text-amber-500"
-                    : "text-red-500"
+                    ? "text-amber-400"
+                    : "text-red-400"
               )}
               strokeDasharray={circumference}
               strokeDashoffset={offset}
@@ -52,15 +57,15 @@ export function ScoreGauge({ score, label, description }: ScoreGaugeProps) {
             <span className={cn("text-2xl font-bold", getScoreColor(score))}>
               {score}%
             </span>
-            <span className="text-[10px] text-muted-foreground">Score</span>
+            <span className="text-[10px] text-text-disabled">Score</span>
           </div>
         </div>
         {description && (
-          <p className="text-xs text-muted-foreground text-center mt-3">
+          <p className="text-xs text-text-secondary text-center mt-3">
             {description}
           </p>
         )}
-      </CardContent>
-    </Card>
+      </GlassCardContent>
+    </GlassCard>
   )
 }

@@ -10,8 +10,15 @@ import { useAnalysisStore } from "@/store/analysis-store"
 import { JobDescriptionInput } from "@/components/dashboard/job-description-input"
 import { ResumeUpload } from "@/components/dashboard/resume-upload"
 import { ResumeGenerator } from "@/components/dashboard/resume-generator"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { NeonButton } from "@/components/ui/neon-button"
+import { SystemStatus } from "@/components/ui/system-status"
+import {
+  GlassCard,
+  GlassCardContent,
+  GlassCardHeader,
+  GlassCardTitle,
+  GlassCardDescription,
+} from "@/components/ui/glass-card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { SAMPLE_JOB_DESCRIPTION } from "@/lib/sample-data"
 
@@ -52,7 +59,8 @@ export default function DashboardPage() {
   // eslint-disable-next-line react-hooks/incompatible-library
   const currentJD = watch("jobDescription")
   const hasResume = resumeFile !== null
-  const canAnalyze = currentJD.length >= 50 && hasResume && !errors.jobDescription
+  const canAnalyze =
+    currentJD.length >= 50 && hasResume && !errors.jobDescription
 
   const handleLoadSampleJD = useCallback(() => {
     setValue("jobDescription", SAMPLE_JOB_DESCRIPTION, { shouldValidate: true })
@@ -83,7 +91,6 @@ export default function DashboardPage() {
 
   const handleDemoResume = useCallback(
     (text: string, fileName: string) => {
-      // Create a File from the generated text
       const blob = new Blob([text], { type: "text/plain" })
       const file = new File([blob], fileName, { type: "text/plain" })
       setResumeFile(file)
@@ -122,23 +129,40 @@ export default function DashboardPage() {
         err instanceof Error ? err.message : "An unexpected error occurred"
       )
     }
-  }, [canAnalyze, currentJD, resumeFile, setLoading, setError, setResults, router])
+  }, [
+    canAnalyze,
+    currentJD,
+    resumeFile,
+    setLoading,
+    setError,
+    setResults,
+    router,
+  ])
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight mb-2">
-          Resume Screening Dashboard
-        </h1>
-        <p className="text-muted-foreground">
+        <div className="flex items-center gap-3 mb-2">
+          <h1 className="text-2xl font-bold tracking-[-0.04em] text-text-primary">
+            Resume Screening Dashboard
+          </h1>
+          <SystemStatus
+            label={isLoading ? "ANALYZING" : "READY"}
+            status={isLoading ? "processing" : "online"}
+          />
+        </div>
+        <p className="text-text-secondary">
           Enter a job description and upload a resume to get AI-powered analysis.
         </p>
       </div>
 
       {/* Error Alert */}
       {error && (
-        <Alert variant="destructive" className="mb-6">
+        <Alert
+          variant="destructive"
+          className="mb-6 bg-red-500/10 border-red-500/30 text-red-400"
+        >
           <AlertTriangle className="size-4" />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
@@ -166,24 +190,27 @@ export default function DashboardPage() {
             onClear={handleClearFile}
             disabled={isLoading}
             extraAction={
-              <ResumeGenerator onSelect={handleDemoResume} disabled={isLoading} />
+              <ResumeGenerator
+                onSelect={handleDemoResume}
+                disabled={isLoading}
+              />
             }
           />
         </div>
 
-        {/* Right Panel: Action & Quick Results */}
+        {/* Right Panel: Action & Status */}
         <div className="lg:col-span-1">
-          <Card>
-            <CardHeader>
-              <CardTitle>Analysis</CardTitle>
-              <CardDescription>
+          <GlassCard>
+            <GlassCardHeader>
+              <GlassCardTitle>Analysis</GlassCardTitle>
+              <GlassCardDescription>
                 {canAnalyze
                   ? "Ready to analyze candidate"
                   : "Fill in both panels to start"}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Button
+              </GlassCardDescription>
+            </GlassCardHeader>
+            <GlassCardContent className="space-y-4">
+              <NeonButton
                 className="w-full"
                 size="lg"
                 onClick={handleAnalyze}
@@ -191,28 +218,26 @@ export default function DashboardPage() {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="size-5 mr-2 animate-spin" />
+                    <Loader2 className="size-5 animate-spin" />
                     Analyzing...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="size-5 mr-2" />
+                    <Sparkles className="size-5" />
                     Analyze Candidate
                   </>
                 )}
-              </Button>
+              </NeonButton>
 
               {/* Status indicators */}
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <div
                     className={`size-2 rounded-full ${
-                      currentJD.length >= 50
-                        ? "bg-emerald-500"
-                        : "bg-muted-foreground/30"
+                      currentJD.length >= 50 ? "bg-lime" : "bg-text-disabled"
                     }`}
                   />
-                  <span className="text-muted-foreground">
+                  <span className="text-text-secondary text-xs">
                     Job Description{" "}
                     {currentJD.length >= 50 ? "✓" : "(min 50 chars)"}
                   </span>
@@ -220,19 +245,16 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-2 text-sm">
                   <div
                     className={`size-2 rounded-full ${
-                      hasResume
-                        ? "bg-emerald-500"
-                        : "bg-muted-foreground/30"
+                      hasResume ? "bg-lime" : "bg-text-disabled"
                     }`}
                   />
-                  <span className="text-muted-foreground">
-                    Resume Uploaded{" "}
-                    {hasResume ? "✓" : "(required)"}
+                  <span className="text-text-secondary text-xs">
+                    Resume Uploaded {hasResume ? "✓" : "(required)"}
                   </span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </GlassCardContent>
+          </GlassCard>
         </div>
       </div>
     </div>

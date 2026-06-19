@@ -8,7 +8,12 @@ import {
   Tooltip,
   Legend,
 } from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  GlassCard,
+  GlassCardContent,
+  GlassCardHeader,
+  GlassCardTitle,
+} from "@/components/ui/glass-card"
 
 interface SkillDistributionChartProps {
   matchedCount: number
@@ -16,8 +21,8 @@ interface SkillDistributionChartProps {
 }
 
 const COLORS = {
-  matched: "#14B8A6",
-  missing: "#EF4444",
+  matched: "#10b981",
+  missing: "#ff4444",
 }
 
 export function SkillDistributionChart({
@@ -30,14 +35,15 @@ export function SkillDistributionChart({
   ]
 
   const total = matchedCount + missingCount
-  const matchPercent = total > 0 ? Math.round((matchedCount / total) * 100) : 0
+  const matchPercent =
+    total > 0 ? Math.round((matchedCount / total) * 100) : 0
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Skill Match Distribution</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <GlassCard>
+      <GlassCardHeader>
+        <GlassCardTitle>Skill Match Distribution</GlassCardTitle>
+      </GlassCardHeader>
+      <GlassCardContent>
         <div className="flex flex-col items-center">
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -56,20 +62,29 @@ export function SkillDistributionChart({
               </Pie>
               <Tooltip
                 contentStyle={{
-                  borderRadius: "8px",
-                  border: "1px solid hsl(var(--border))",
-                  backgroundColor: "hsl(var(--background))",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  backgroundColor: "#0c0c0c",
+                  color: "#ebebeb",
                 }}
               />
-              <Legend />
+              <Legend
+                formatter={(value) => (
+                  <span style={{ color: "rgba(235,235,235,0.6)" }}>
+                    {value}
+                  </span>
+                )}
+              />
             </PieChart>
           </ResponsiveContainer>
-          <p className="text-sm text-muted-foreground text-center mt-2">
-            <span className="text-emerald-500 font-semibold">{matchPercent}%</span>{" "}
+          <p className="text-sm text-text-secondary text-center mt-2">
+            <span className="text-emerald-400 font-semibold">
+              {matchPercent}%
+            </span>{" "}
             of required skills matched
           </p>
         </div>
-      </CardContent>
-    </Card>
+      </GlassCardContent>
+    </GlassCard>
   )
 }

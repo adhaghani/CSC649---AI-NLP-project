@@ -2,12 +2,7 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import {
-  ArrowLeft,
-  Download,
-  ThumbsUp,
-  ThumbsDown,
-} from "lucide-react"
+import { ArrowLeft, Download, ThumbsUp, ThumbsDown } from "lucide-react"
 import { useAnalysisStore } from "@/store/analysis-store"
 import { CandidateProfile } from "@/components/results/candidate-profile"
 import { MatchScore } from "@/components/results/match-score"
@@ -16,7 +11,12 @@ import { AISummary } from "@/components/results/ai-summary"
 import { RecommendationBadge } from "@/components/results/recommendation-badge"
 import { ResultsChat } from "@/components/assistant-ui/results-chat"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  GlassCard,
+  GlassCardContent,
+  GlassCardHeader,
+  GlassCardTitle,
+} from "@/components/ui/glass-card"
 import { ResultsSkeleton } from "@/components/skeletons"
 
 export default function ResultsPage() {
@@ -35,18 +35,18 @@ export default function ResultsPage() {
 
   if (!results) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div>
         <ResultsSkeleton />
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
       {/* Back button */}
       <Button
         variant="ghost"
-        className="mb-6"
+        className="mb-6 text-text-secondary hover:text-text-primary hover:bg-glass-bg"
         onClick={() => router.push("/dashboard")}
       >
         <ArrowLeft className="size-4 mr-2" />
@@ -56,28 +56,32 @@ export default function ResultsPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">
+          <h1 className="text-2xl font-bold tracking-[-0.04em] text-text-primary">
             Analysis Results
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-text-secondary">
             AI-powered candidate evaluation for {results.candidateName}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <RecommendationBadge recommendation={results.recommendation} />
-          <Button variant="outline" size="sm" onClick={handleExportPDF}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-text-secondary border-glass-border hover:bg-glass-bg hover:text-text-primary"
+            onClick={handleExportPDF}
+          >
             <Download className="size-4 mr-2" />
             Export PDF
           </Button>
         </div>
       </div>
 
-      {/* Full Results — single scrolling page */}
+      {/* Full Results */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column */}
         <div className="lg:col-span-1 space-y-6">
           <CandidateProfile candidate={results} />
-
           <MatchScore
             score={results.matchScore}
             recommendation={results.recommendation}
@@ -100,51 +104,51 @@ export default function ResultsPage() {
           {/* Strengths & Weaknesses */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Strengths */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+            <GlassCard>
+              <GlassCardHeader>
+                <GlassCardTitle className="flex items-center gap-2 text-emerald-400">
                   <ThumbsUp className="size-5" />
                   Strengths
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </GlassCardTitle>
+              </GlassCardHeader>
+              <GlassCardContent>
                 <ul className="space-y-2">
                   {results.strengths.map((s, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="size-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                      <span className="text-muted-foreground">{s}</span>
+                      <span className="size-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+                      <span className="text-text-secondary">{s}</span>
                     </li>
                   ))}
                 </ul>
-              </CardContent>
-            </Card>
+              </GlassCardContent>
+            </GlassCard>
 
             {/* Weaknesses */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
+            <GlassCard>
+              <GlassCardHeader>
+                <GlassCardTitle className="flex items-center gap-2 text-red-400">
                   <ThumbsDown className="size-5" />
                   Areas for Improvement
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </GlassCardTitle>
+              </GlassCardHeader>
+              <GlassCardContent>
                 <ul className="space-y-2">
                   {results.weaknesses.map((w, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="size-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
-                      <span className="text-muted-foreground">{w}</span>
+                      <span className="size-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" />
+                      <span className="text-text-secondary">{w}</span>
                     </li>
                   ))}
                 </ul>
-              </CardContent>
-            </Card>
+              </GlassCardContent>
+            </GlassCard>
           </div>
 
           <AISummary summary={results.summary} />
         </div>
       </div>
 
-      {/* AI Chatbot — floating modal button (bottom-right) */}
+      {/* AI Chatbot */}
       <ResultsChat results={results} />
     </div>
   )

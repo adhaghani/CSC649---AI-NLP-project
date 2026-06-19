@@ -1,5 +1,4 @@
 import type { RecommendationType } from "@/types"
-import { Badge } from "@/components/ui/badge"
 import { cn, getRecommendationColor } from "@/lib/utils"
 import { Circle } from "lucide-react"
 
@@ -13,15 +12,15 @@ export function RecommendationBadge({
   className,
 }: RecommendationBadgeProps) {
   return (
-    <Badge
+    <div
       className={cn(
-        "px-4 py-1.5 text-sm font-semibold border",
+        "inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold border",
         getRecommendationColor(recommendation),
         className
       )}
     >
-      <Circle className="size-2 fill-current mr-1.5" />
+      <Circle className="size-2 fill-current" />
       {recommendation}
-    </Badge>
+    </div>
   )
 }

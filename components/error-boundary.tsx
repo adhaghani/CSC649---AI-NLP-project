@@ -2,7 +2,7 @@
 
 import { Component, type ReactNode } from "react"
 import { AlertTriangle, RefreshCw } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { NeonButton } from "@/components/ui/neon-button"
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -33,20 +33,22 @@ export class ErrorBoundary extends Component<
 
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] p-8 text-center">
-          <div className="flex items-center justify-center size-16 rounded-full bg-destructive/10 mb-4">
-            <AlertTriangle className="size-8 text-destructive" />
+          <div className="flex items-center justify-center size-16 rounded-full bg-red-500/10 mb-4">
+            <AlertTriangle className="size-8 text-red-400" />
           </div>
-          <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
-          <p className="text-muted-foreground mb-6 max-w-md">
+          <h2 className="text-xl font-semibold text-text-primary mb-2">
+            Something went wrong
+          </h2>
+          <p className="text-text-secondary mb-6 max-w-md">
             {this.state.error?.message ??
               "An unexpected error occurred. Please try again."}
           </p>
-          <Button
+          <NeonButton
             onClick={() => this.setState({ hasError: false, error: null })}
           >
             <RefreshCw className="size-4 mr-2" />
             Try Again
-          </Button>
+          </NeonButton>
         </div>
       )
     }

@@ -1,7 +1,13 @@
 "use client"
 
 import { FileText, Copy } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import {
+  GlassCard,
+  GlassCardContent,
+  GlassCardHeader,
+  GlassCardTitle,
+  GlassCardDescription,
+} from "@/components/ui/glass-card"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -25,49 +31,51 @@ export function JobDescriptionInput({
   const charCount = value.length
 
   return (
-    <Card>
-      <CardHeader>
+    <GlassCard>
+      <GlassCardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="size-5" />
+            <GlassCardTitle className="flex items-center gap-2">
+              <FileText className="size-5 text-lime" />
               Job Description
-            </CardTitle>
-            <CardDescription>
+            </GlassCardTitle>
+            <GlassCardDescription>
               Paste the job description for analysis
-            </CardDescription>
+            </GlassCardDescription>
           </div>
           <Button
             variant="outline"
             size="sm"
             onClick={onLoadSample}
             disabled={disabled}
+            className="text-text-secondary border-glass-border hover:bg-glass-bg hover:text-text-primary"
           >
             <Copy className="size-4 mr-2" />
             Load Sample
           </Button>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-3">
+      </GlassCardHeader>
+      <GlassCardContent className="space-y-3">
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           placeholder="Paste the full job description here including required skills, qualifications, and experience..."
           className={cn(
-            "w-full min-h-[240px] rounded-lg border bg-background px-3 py-2 text-sm",
-            "placeholder:text-muted-foreground/60",
-            "focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary",
+            "w-full min-h-[240px] rounded-xl border border-glass-border bg-white/[0.04] px-3 py-2 text-sm text-text-primary",
+            "placeholder:text-text-disabled",
+            "focus:outline-none focus:ring-2 focus:ring-lime/50 focus:border-lime/30",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             "resize-y",
-            error && "border-destructive focus:border-destructive focus:ring-destructive/20"
+            error &&
+              "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20"
           )}
           maxLength={MAX_CHARS}
         />
         {error && (
-          <p className="text-xs font-medium text-destructive">{error}</p>
+          <p className="text-xs font-medium text-red-400">{error}</p>
         )}
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex items-center justify-between text-xs text-text-secondary">
           <span>
             {charCount > 0 ? (
               <>
@@ -79,12 +87,12 @@ export function JobDescriptionInput({
             )}
           </span>
           {charCount >= MAX_CHARS && (
-            <span className="text-amber-500 font-medium">
+            <span className="text-amber-400 font-medium">
               Character limit reached
             </span>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </GlassCardContent>
+    </GlassCard>
   )
 }

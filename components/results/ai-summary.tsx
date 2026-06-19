@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  GlassCard,
+  GlassCardContent,
+  GlassCardHeader,
+  GlassCardTitle,
+} from "@/components/ui/glass-card"
 import { Sparkles } from "lucide-react"
 
 interface AISummaryProps {
@@ -7,18 +12,18 @@ interface AISummaryProps {
 
 export function AISummary({ summary }: AISummaryProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Sparkles className="size-5 text-primary" />
+    <GlassCard>
+      <GlassCardHeader>
+        <GlassCardTitle className="flex items-center gap-2 !text-text-primary">
+          <Sparkles className="size-5 text-lime" />
           AI Evaluation Summary
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm leading-relaxed text-muted-foreground">
+        </GlassCardTitle>
+      </GlassCardHeader>
+      <GlassCardContent>
+        <p className="text-sm leading-relaxed text-text-secondary">
           {summary}
         </p>
-      </CardContent>
-    </Card>
+      </GlassCardContent>
+    </GlassCard>
   )
 }

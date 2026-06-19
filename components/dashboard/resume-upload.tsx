@@ -3,12 +3,12 @@
 import { useCallback, type ReactNode } from "react"
 import { Upload, FileText, X } from "lucide-react"
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card"
+  GlassCard,
+  GlassCardContent,
+  GlassCardHeader,
+  GlassCardTitle,
+  GlassCardDescription,
+} from "@/components/ui/glass-card"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -70,32 +70,34 @@ export function ResumeUpload({
   }, [])
 
   return (
-    <Card>
-      <CardHeader>
+    <GlassCard>
+      <GlassCardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <Upload className="size-5" />
+            <GlassCardTitle className="flex items-center gap-2">
+              <Upload className="size-5 text-lime" />
               Resume Upload
-            </CardTitle>
-            <CardDescription>Upload a PDF or DOCX resume file</CardDescription>
+            </GlassCardTitle>
+            <GlassCardDescription>
+              Upload a PDF or DOCX resume file
+            </GlassCardDescription>
           </div>
           {extraAction}
         </div>
-      </CardHeader>
-      <CardContent>
+      </GlassCardHeader>
+      <GlassCardContent>
         {resumeFileName && resumeFile ? (
           <div className="space-y-4">
-            <div className="flex items-center justify-between rounded-lg border bg-muted/30 p-4">
+            <div className="flex items-center justify-between rounded-xl border border-glass-border bg-white/[0.03] p-4">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-lime/15 text-lime">
                   <FileText className="size-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">
+                  <p className="truncate text-sm font-medium text-text-primary">
                     {resumeFileName}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-text-secondary">
                     {formatFileSize(resumeFile.size)}
                   </p>
                 </div>
@@ -105,12 +107,12 @@ export function ResumeUpload({
                 size="icon"
                 onClick={onClear}
                 disabled={disabled}
-                className="shrink-0"
+                className="shrink-0 text-text-secondary hover:text-text-primary hover:bg-glass-bg"
               >
                 <X className="size-4" />
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-text-secondary">
               File will be parsed on the server when you click &quot;Analyze
               Candidate&quot;.
             </p>
@@ -120,21 +122,27 @@ export function ResumeUpload({
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             className={cn(
-              "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 transition-colors",
-              "border-muted-foreground/25 hover:border-primary/50 hover:bg-primary/5"
+              "flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-12 transition-colors",
+              "border-glass-border hover:border-lime/40 hover:bg-lime/[0.03]"
             )}
           >
-            <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-muted">
-              <Upload className="size-8 text-muted-foreground" />
+            <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-white/[0.05]">
+              <Upload className="size-8 text-text-secondary" />
             </div>
-            <p className="mb-1 text-sm font-medium">
+            <p className="mb-1 text-sm font-medium text-text-primary">
               Drag & drop your resume here
             </p>
-            <p className="mb-4 text-xs text-muted-foreground">
+            <p className="mb-4 text-xs text-text-secondary">
               PDF or DOCX — up to 10MB
             </p>
             <label>
-              <Button variant="outline" size="sm" disabled={disabled} asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={disabled}
+                asChild
+                className="text-text-secondary border-glass-border hover:bg-glass-bg hover:text-text-primary"
+              >
                 <span>
                   <FileText className="mr-2 size-4" />
                   Browse Files
@@ -152,7 +160,7 @@ export function ResumeUpload({
             </label>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </GlassCardContent>
+    </GlassCard>
   )
 }

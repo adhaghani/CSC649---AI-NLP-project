@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { GlassCard } from "@/components/ui/glass-card"
 
 const TEMPLATES = {
   "software-engineer": {
@@ -143,21 +143,31 @@ interface ResumeGeneratorProps {
   disabled?: boolean
 }
 
-export function ResumeGenerator({ onSelect, disabled }: ResumeGeneratorProps) {
+export function ResumeGenerator({
+  onSelect,
+  disabled,
+}: ResumeGeneratorProps) {
   const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" disabled={disabled}>
-          <Sparkles className="size-4 mr-2" />
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={disabled}
+          className="text-text-secondary border-glass-border hover:bg-glass-bg hover:text-text-primary"
+        >
+          <Sparkles className="size-4 mr-2 text-lime" />
           Generate Demo Resume
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg border-glass-border bg-obsidian">
         <DialogHeader>
-          <DialogTitle>Demo Resume Generator</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-text-primary">
+            Demo Resume Generator
+          </DialogTitle>
+          <DialogDescription className="text-text-secondary">
             Select a sample resume to quickly test the screening assistant.
           </DialogDescription>
         </DialogHeader>
@@ -165,29 +175,34 @@ export function ResumeGenerator({ onSelect, disabled }: ResumeGeneratorProps) {
           {(Object.keys(TEMPLATES) as TemplateKey[]).map((key) => {
             const template = TEMPLATES[key]
             return (
-              <Card
+              <GlassCard
                 key={key}
-                className="p-4 cursor-pointer hover:border-primary/50 transition-colors"
+                glowOnHover
+                className="p-4 cursor-pointer"
                 onClick={() => {
                   onSelect(
                     template.text,
-                    `demo-resume-${template.title.toLowerCase().replace(/\s+/g, "-")}.txt`
+                    `demo-resume-${template.title
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}.txt`
                   )
                   setOpen(false)
                 }}
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex items-center justify-center size-10 rounded-lg bg-primary/10 text-primary shrink-0 mt-0.5">
+                  <div className="flex items-center justify-center size-10 rounded-xl bg-lime/15 text-lime shrink-0 mt-0.5">
                     <template.icon className="size-5" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-sm">{template.title}</h4>
-                    <p className="text-xs text-muted-foreground">
+                    <h4 className="font-medium text-sm text-text-primary">
+                      {template.title}
+                    </h4>
+                    <p className="text-xs text-text-secondary">
                       {template.description}
                     </p>
                   </div>
                 </div>
-              </Card>
+              </GlassCard>
             )
           })}
         </div>
