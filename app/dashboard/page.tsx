@@ -1,11 +1,11 @@
 "use client"
 
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Loader2, Sparkles, AlertTriangle } from "lucide-react"
+import { Sparkles, AlertTriangle, Loader2 } from "lucide-react"
 import { useAnalysisStore } from "@/store/analysis-store"
 import { JobDescriptionInput } from "@/components/dashboard/job-description-input"
 import { ResumeUpload } from "@/components/dashboard/resume-upload"
@@ -46,6 +46,8 @@ export default function DashboardPage() {
     setLoading,
     setError,
   } = useAnalysisStore()
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
     setValue,
@@ -103,6 +105,7 @@ export default function DashboardPage() {
   const handleAnalyze = useCallback(async () => {
     if (!canAnalyze || !resumeFile) return
 
+    setIsSubmitting(true)
     setLoading(true)
     setError(null)
 
@@ -125,6 +128,7 @@ export default function DashboardPage() {
       setResults(data)
       router.push("/dashboard/results")
     } catch (err) {
+      setIsSubmitting(false)
       setError(
         err instanceof Error ? err.message : "An unexpected error occurred"
       )
@@ -204,7 +208,9 @@ export default function DashboardPage() {
             <GlassCardHeader>
               <GlassCardTitle>Analysis</GlassCardTitle>
               <GlassCardDescription>
-                {canAnalyze
+                {isSubmitting
+                  ? "Analyzing resume against job description..."
+                  : canAnalyze
                   ? "Ready to analyze candidate"
                   : "Fill in both panels to start"}
               </GlassCardDescription>
@@ -214,9 +220,9 @@ export default function DashboardPage() {
                 className="w-full"
                 size="lg"
                 onClick={handleAnalyze}
-                disabled={!canAnalyze || isLoading}
+                disabled={!canAnalyze || isSubmitting}
               >
-                {isLoading ? (
+                {isSubmitting ? (
                   <>
                     <Loader2 className="size-5 animate-spin" />
                     Analyzing...

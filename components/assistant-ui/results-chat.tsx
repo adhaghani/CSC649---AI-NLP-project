@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useMemo, type FC } from "react";
+import { useMemo, type FC } from "react"
 import {
   AssistantRuntimeProvider,
   useLocalRuntime,
@@ -8,9 +8,9 @@ import {
   type ChatModelRunResult,
   type SuggestionAdapter,
   type ThreadMessage,
-} from "@assistant-ui/react";
-import { AssistantModal } from "@/components/assistant-ui/assistant-modal";
-import type { AnalysisResult } from "@/types";
+} from "@assistant-ui/react"
+import { AssistantModal } from "@/components/assistant-ui/assistant-modal"
+import type { AnalysisResult } from "@/types"
 
 // ---------------------------------------------------------------------------
 // Static suggestion prompts shown when the chat is empty
@@ -21,11 +21,11 @@ const SUGGESTIONS = [
   { prompt: "What skills should I improve?" },
   { prompt: "How does my experience compare to the job requirements?" },
   { prompt: "Summarize my evaluation" },
-] as const;
+] as const
 
 const suggestionAdapter: SuggestionAdapter = {
   generate: async () => SUGGESTIONS,
-};
+}
 
 // ---------------------------------------------------------------------------
 // Build a system context message containing the full analysis results
@@ -69,7 +69,7 @@ ${results.weaknesses.map((w) => `- ${w}`).join("\n")}
 Summary: ${results.summary}
 === END ANALYSIS RESULTS ===
 
-Use this context to answer questions about the evaluation. If asked about something not covered above, be honest about the limitation. Keep answers friendly and helpful.`;
+Use this context to answer questions about the evaluation. If asked about something not covered above, be honest about the limitation. Keep answers friendly and helpful.`
 }
 
 // ---------------------------------------------------------------------------
@@ -77,24 +77,22 @@ Use this context to answer questions about the evaluation. If asked about someth
 // Messages from assistant-ui store their text as an array of { type:"text", text } parts.
 // ---------------------------------------------------------------------------
 function extractMessageText(message: ThreadMessage): string {
-  const content = message.content;
-  if (typeof content === "string") return content;
+  const content = message.content
+  if (typeof content === "string") return content
   return (content as ReadonlyArray<{ type: string; text?: string }>)
     .filter((p) => p.type === "text")
     .map((p) => p.text ?? "")
-    .join("");
+    .join("")
 }
 
 // ---------------------------------------------------------------------------
 // ChatModelAdapter — called by the runtime every time the user sends a message.
 // Prepends the analysis context as a system message and proxies to /api/chat.
 // ---------------------------------------------------------------------------
-function createChatModelAdapter(
-  contextMessage: string,
-): ChatModelAdapter {
+function createChatModelAdapter(contextMessage: string): ChatModelAdapter {
   return {
     async run(options): Promise<ChatModelRunResult> {
-      const { messages, abortSignal } = options;
+      const { messages, abortSignal } = options
 
       // Convert runtime messages to the format expected by our API route.
       // We only include user and assistant messages — system messages
@@ -104,35 +102,35 @@ function createChatModelAdapter(
         .map((m) => ({
           role: m.role as "user" | "assistant",
           content: extractMessageText(m),
-        }));
+        }))
 
       const apiMessages = [
         { role: "system", content: contextMessage },
         ...userMessages,
-      ];
+      ]
 
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: apiMessages }),
         signal: abortSignal,
-      });
+      })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorData = await response.json().catch(() => ({}))
         throw new Error(
           (errorData as { error?: string }).error ??
-            `Chat API error (${response.status})`,
-        );
+            `Chat API error (${response.status})`
+        )
       }
 
-      const data = (await response.json()) as { content: string };
+      const data = (await response.json()) as { content: string }
 
       return {
         content: [{ type: "text", text: data.content }],
-      };
+      }
     },
-  };
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -141,27 +139,24 @@ function createChatModelAdapter(
 // ---------------------------------------------------------------------------
 export const ResultsChat: FC<{ results: AnalysisResult }> = ({ results }) => {
   // Build the system context once and keep it stable across renders.
-  const contextMessage = useMemo(
-    () => buildSystemContext(results),
-    [results],
-  );
+  const contextMessage = useMemo(() => buildSystemContext(results), [results])
 
   // Create the chat adapter, also stable.
   const chatModelAdapter = useMemo(
     () => createChatModelAdapter(contextMessage),
-    [contextMessage],
-  );
+    [contextMessage]
+  )
 
   // Initialize the local runtime with our adapter + static suggestions.
   const runtime = useLocalRuntime(chatModelAdapter, {
     adapters: {
       suggestion: suggestionAdapter,
     },
-  });
+  })
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <AssistantModal hideAttachments />
     </AssistantRuntimeProvider>
-  );
-};
+  )
+}
